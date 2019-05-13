@@ -1,0 +1,27 @@
+---
+ - hosts: local
+   become: root
+   vars_prompt:
+    - name: version
+      prompt: Get your verion
+      myversion: 7.5
+   tasks:
+
+    - name: etc_issue
+      shell: cat /etc/os-release
+      register: etc_issue
+    - debug: msg="{{etc_issue.stdout_lines}}"
+      when: version == "7.5"
+      notify:
+       - display
+   handlers:
+    - name: notmatched
+      shell: echo "version not matched"
+      register: notmatched
+    - debug: msg="{{notmatched.stdout_lines}}"
+
+    - name: display
+      shell: echo "version matchedi"
+      register: display
+    - debug: msg="{{display.stdout_lines}}"
+

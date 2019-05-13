@@ -1,0 +1,30 @@
+---
+- name: Print linux distribution and version
+  become: root
+  hosts: local
+  tasks:
+    - name: capture output of id command
+      command: cat /etc/os-release
+      register: login
+
+    - debug:
+        msg: "{{ login.stdout }}"
+
+    - debug: 
+        msg: veraion comaparision "{{ ansible_distribution_version is version('7.0','>=') }}"
+
+        
+  
+    - name: Sending an e-mail using Gmail SMTP servers
+      mail:
+        host: smtp.gmail.com
+        port: 587
+        secure: starttls
+        charset: utf-8
+        sender: mallikarjunareddy.sudha@gmail.com
+        username: mallikarjunareddy.sudha@gmail.com
+        password: malli548
+        to:  sudha.malli548@gmail.com
+        subject: Ansible-report
+        body: veresion comparision "{{ ansible_distribution_version is version('7', '>=') }}"
+
